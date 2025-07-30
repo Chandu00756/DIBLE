@@ -1,0 +1,23 @@
+numpy>=1.21.0
+scipy>=1.7.0
+cryptography>=3.4.8
+pycryptodome>=3.15.0
+sympy>=1.9
+networkx>=2.6
+matplotlib>=3.4.3
+seaborn>=0.11.2
+hashlib3>=3.0.0
+blake3>=0.3.0
+xxhash>=2.0.2
+murmur3>=0.5.1
+pillow>=8.3.2
+psutil>=5.8.0
+py-cpuinfo>=8.0.0
+GPUtil>=1.4.0
+platform-info>=1.0.0
+
+# CLI Interface Dependencies for Professional UI
+click>=8.0.0
+rich>=13.0.0
+colorama>=0.4.4
+pyfiglet>=0.8.0

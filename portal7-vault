@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+"""
+PORTAL VII - DIBLE Vault External CLI
+Professional external terminal application
+
+Usage: portal7-vault [command] [options]
+"""
+
+import sys
+import os
+from pathlib import Path
+
+# Add DIBLE project to Python path
+project_root = Path(__file__).parent
+sys.path.insert(0, str(project_root))
+
+# Import and run professional CLI
+try:
+    from dible_vault_cli import vault_cli
+    
+    if __name__ == "__main__":
+        vault_cli()
+        
+except ImportError as e:
+    print(f"PORTAL VII Error: {e}")
+    print("Please ensure all dependencies are installed:")
+    print("pip install rich click numpy scipy cryptography pycryptodome sympy")
+    sys.exit(1)
+except Exception as e:
+    print(f"PORTAL VII Runtime Error: {e}")
+    sys.exit(1)
