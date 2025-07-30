@@ -10,7 +10,7 @@
 
 **PORTAL VII DIBLE** (Hierarchical Chaos Device Identity-Based Lattice Encryption) is a state-of-the-art quantum-resistant cryptographic system that combines lattice-based cryptography with chaos theory, quantum-inspired operations, and advanced mathematical primitives to provide enterprise-grade encryption with device identity binding.
 
-### 🏗️ Architecture
+###  Architecture
 
 ```
 PORTAL VII DIBLE
@@ -22,7 +22,7 @@ PORTAL VII DIBLE
 └──  Post-Quantum Security
 ```
 
-## ✨ Key Features
+##  Key Features
 
 ### 🔒 **Advanced Cryptography**
 - **Quantum-Resistant**: Post-quantum cryptographic algorithms
