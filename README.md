@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Production--Ready-brightgreen.svg)](https://github.com/Chandu00756/DIBLE)
 
-## 🚀 Overview
+##  Overview
 
 **PORTAL VII DIBLE** (Hierarchical Chaos Device Identity-Based Lattice Encryption) is a state-of-the-art quantum-resistant cryptographic system that combines lattice-based cryptography with chaos theory, quantum-inspired operations, and advanced mathematical primitives to provide enterprise-grade encryption with device identity binding.
 
@@ -14,12 +14,12 @@
 
 ```
 PORTAL VII DIBLE
-├── 🔐 HC-DIBLE-VAULT Algorithm (256-bit Security)
-├── 🔑 Device Identity Binding
-├── 🌀 Chaos Theory Integration  
-├── 📐 Lattice-Based Cryptography
-├── 🧮 Homomorphic Operations
-└── 🛡️ Post-Quantum Security
+├──  HC-DIBLE-VAULT Algorithm (256-bit Security)
+├──  Device Identity Binding
+├──  Chaos Theory Integration  
+├──  Lattice-Based Cryptography
+├──  Homomorphic Operations
+└──  Post-Quantum Security
 ```
 
 ## ✨ Key Features
@@ -30,14 +30,14 @@ PORTAL VII DIBLE
 - **Lattice-Based**: Resistant to quantum computer attacks
 - **Device Binding**: Hardware-level identity verification
 
-### 🎯 **Core Capabilities**
+###  **Core Capabilities**
 - **Professional Vault Management**: Rich CLI interface
 - **Homomorphic Encryption**: Compute on encrypted data
 - **Chaos Theory Integration**: Enhanced entropy generation
 - **Multi-dimensional Entropy**: Advanced randomness sources
 - **Polynomial Operations**: Mathematical cryptographic foundations
 
-### 🖥️ **User Interfaces**
+###  **User Interfaces**
 - **Rich CLI**: Professional command-line interface
 - **Interactive Launcher**: Multiple execution options
 - **VS Code Extension**: IDE integration (optional)
@@ -183,7 +183,7 @@ encrypted, keys = quick_encrypt("Secret data")
 decrypted = quick_decrypt(encrypted, keys['private_key'])
 ```
 
-## 🏗️ Architecture
+##  Architecture
 
 ### Core Modules
 
@@ -216,7 +216,7 @@ Each encryption operation is bound to a specific device identity, adding an addi
 - Post-quantum signature schemes
 - Quantum-inspired key distribution
 
-## 🎯 Use Cases
+##  Use Cases
 
 ### Enterprise Applications
 
@@ -232,7 +232,7 @@ Each encryption operation is bound to a specific device identity, adding an addi
 - **Blockchain**: Post-quantum cryptographic primitives
 - **AI/ML**: Privacy-preserving machine learning
 
-## ⚡ Performance
+##  Performance
 
 DIBLE is optimized for production use with:
 
@@ -241,7 +241,7 @@ DIBLE is optimized for production use with:
 - Memory-efficient algorithms
 - Configurable security levels for performance tuning
 
-## �️ Configuration
+##  Configuration
 
 DIBLE uses JSON configuration files stored in `~/.dible_config.json`:
 
@@ -256,7 +256,7 @@ DIBLE uses JSON configuration files stored in `~/.dible_config.json`:
 }
 ```
 
-## 📊 Benchmarks
+##  Benchmarks
 
 Run performance benchmarks:
 
@@ -271,7 +271,7 @@ Typical performance metrics:
 - **Decryption**: ~3ms per KB
 - **Homomorphic Operations**: ~50ms per operation
 
-## 🤝 Contributing
+##  Contributing
 
 This is a production-ready cryptographic system. For integration support or custom implementations, please contact the development team.
 
@@ -280,7 +280,7 @@ This is a production-ready cryptographic system. For integration support or cust
 PORTAL VII's DIBLE - Professional Cryptographic Suite
 All rights reserved.
 
-## 🔮 Future Roadmap
+##  Future Roadmap
 
 - Hardware acceleration support
 - Distributed key management
