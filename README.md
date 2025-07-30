@@ -43,7 +43,7 @@ PORTAL VII DIBLE
 - **VS Code Extension**: IDE integration (optional)
 - **REST API**: Programmatic access (coming soon)
 
-## � Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Python 3.8 or higher
@@ -79,7 +79,7 @@ python setup.py develop
 python final_system_test.py
 ```
 
-## 🎮 Usage
+##  Usage
 
 ### Method 1: Main CLI (Recommended)
 ```bash
@@ -126,7 +126,7 @@ print(f"Decrypted: {decrypted['decrypted_data']}")
 - **Real-time Status**: Live system monitoring and statistics
 - **Comprehensive Commands**: Complete control over all DIBLE features
 
-## � Programming Integration
+##  Programming Integration
 
 ### Simple Usage
 
@@ -199,7 +199,7 @@ decrypted = quick_decrypt(encrypted, keys['private_key'])
 - **`dible_integration.py`**: Production-ready integration API
 - **`dible_cli.py`**: Professional command-line interface
 
-## 🔒 Security Features
+##  Security Features
 
 ### Quantum Resistance
 
