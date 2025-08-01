@@ -442,36 +442,53 @@ class DIBLEVaultManager:
         self._ensure_vault_structure()
         
     def _load_vault_config(self) -> Dict[str, Any]:
-        """Load professional vault configuration"""
-        default_config = asdict(VaultConfiguration())
-        default_config['created_timestamp'] = datetime.now().isoformat()
-        default_config['last_updated'] = datetime.now().isoformat()
-        
-        if CONFIG_FILE.exists():
-            try:
+        """Load vault configuration"""
+        try:
+            if CONFIG_FILE.exists():
                 with open(CONFIG_FILE, 'r') as f:
                     config = json.load(f)
-                for key, value in default_config.items():
-                    if key not in config:
-                        config[key] = value
                 return config
-            except Exception:
+            else:
+                # Create default configuration
+                default_config = asdict(VaultConfiguration())
+                default_config['created_timestamp'] = datetime.now().isoformat()
+                default_config['last_updated'] = datetime.now().isoformat()
+                self._save_vault_config(default_config)
                 return default_config
-        else:
+        except json.JSONDecodeError as e:
+            print(f"❌ Invalid configuration file: {e}")
+            # Create backup and new config
+            if CONFIG_FILE.exists():
+                backup_file = CONFIG_FILE.with_suffix('.backup')
+                CONFIG_FILE.rename(backup_file)
+                print(f"📁 Backup created: {backup_file}")
+            
+            default_config = asdict(VaultConfiguration())
+            default_config['created_timestamp'] = datetime.now().isoformat()
+            default_config['last_updated'] = datetime.now().isoformat()
             self._save_vault_config(default_config)
             return default_config
-    
+        except PermissionError as e:
+            print(f"❌ Permission denied accessing config: {e}")
+            return asdict(VaultConfiguration())
+        except Exception as e:
+            print(f"❌ Error loading configuration: {e}")
+            return asdict(VaultConfiguration())
+
     def _save_vault_config(self, config: Optional[Dict[str, Any]] = None):
         """Save vault configuration"""
-        config_to_save = config or self.config
-        config_to_save['last_updated'] = datetime.now().isoformat()
-        
         try:
+            if config is None:
+                config = self.config
+            
+            config['last_updated'] = datetime.now().isoformat()
+            
             with open(CONFIG_FILE, 'w') as f:
-                json.dump(config_to_save, f, indent=4)
+                json.dump(config, f, indent=2)
+        except PermissionError as e:
+            print(f"❌ Permission denied saving config: {e}")
         except Exception as e:
-            if self.console:
-                self.console.print(f"[red]Failed to save vault configuration: {e}[/red]")
+            print(f"❌ Error saving configuration: {e}")
     
     def _ensure_vault_structure(self):
         """Ensure professional vault directory structure"""

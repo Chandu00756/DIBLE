@@ -9,16 +9,30 @@ import platform
 import os
 import socket
 import uuid
-import psutil
 import json
 from typing import Dict, Any
 from Crypto.Hash import SHA3_256, BLAKE2b
 
+# Optional dependencies with proper fallbacks
+try:
+    import psutil
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    PSUTIL_AVAILABLE = False
+    psutil = None
+
 try:
     import cpuinfo
-    import GPUtil
+    CPUINFO_AVAILABLE = True
 except ImportError:
+    CPUINFO_AVAILABLE = False
     cpuinfo = None
+
+try:
+    import GPUtil
+    GPUTIL_AVAILABLE = True
+except ImportError:
+    GPUTIL_AVAILABLE = False
     GPUtil = None
 
 
@@ -34,7 +48,7 @@ class DeviceIDGenerator:
         
         # CPU Information
         try:
-            if cpuinfo:
+            if CPUINFO_AVAILABLE and cpuinfo:
                 cpu_info = cpuinfo.get_cpu_info()
                 hardware_info['cpu'] = {
                     'brand': cpu_info.get('brand_raw', ''),
@@ -46,39 +60,74 @@ class DeviceIDGenerator:
                 }
             else:
                 hardware_info['cpu'] = {
-                    'brand': platform.processor(),
+                    'brand': platform.processor() or 'Unknown',
                     'arch': platform.machine(),
-                    'count': os.cpu_count()
+                    'count': os.cpu_count() or 1
                 }
         except Exception as e:
-            hardware_info['cpu'] = {'error': str(e)}
+            hardware_info['cpu'] = {
+                'brand': platform.processor() or 'Unknown',
+                'arch': platform.machine(),
+                'count': os.cpu_count() or 1,
+                'error': str(e)
+            }
             
         # Memory Information
         try:
-            memory = psutil.virtual_memory()
-            hardware_info['memory'] = {
-                'total': memory.total,
-                'available': memory.available,
-                'used': memory.used,
-                'free': memory.free
-            }
+            if PSUTIL_AVAILABLE and psutil:
+                memory = psutil.virtual_memory()
+                hardware_info['memory'] = {
+                    'total': memory.total,
+                    'available': memory.available,
+                    'used': memory.used,
+                    'free': memory.free
+                }
+            else:
+                # Fallback memory info
+                hardware_info['memory'] = {
+                    'total': 0,
+                    'available': 0,
+                    'used': 0,
+                    'free': 0,
+                    'note': 'psutil not available'
+                }
         except Exception as e:
-            hardware_info['memory'] = {'error': str(e)}
+            hardware_info['memory'] = {
+                'total': 0,
+                'available': 0,
+                'used': 0,
+                'free': 0,
+                'error': str(e)
+            }
             
         # Disk Information
         try:
-            disk_usage = psutil.disk_usage('/')
-            hardware_info['disk'] = {
-                'total': disk_usage.total,
-                'used': disk_usage.used,
-                'free': disk_usage.free
-            }
+            if PSUTIL_AVAILABLE and psutil:
+                disk_usage = psutil.disk_usage('/')
+                hardware_info['disk'] = {
+                    'total': disk_usage.total,
+                    'used': disk_usage.used,
+                    'free': disk_usage.free
+                }
+            else:
+                # Fallback disk info
+                hardware_info['disk'] = {
+                    'total': 0,
+                    'used': 0,
+                    'free': 0,
+                    'note': 'psutil not available'
+                }
         except Exception as e:
-            hardware_info['disk'] = {'error': str(e)}
+            hardware_info['disk'] = {
+                'total': 0,
+                'used': 0,
+                'free': 0,
+                'error': str(e)
+            }
             
         # GPU Information
         try:
-            if GPUtil:
+            if GPUTIL_AVAILABLE and GPUtil:
                 gpus = GPUtil.getGPUs()
                 hardware_info['gpu'] = []
                 for gpu in gpus:
@@ -92,7 +141,7 @@ class DeviceIDGenerator:
                         'uuid': gpu.uuid
                     })
             else:
-                hardware_info['gpu'] = {'error': 'GPUtil not available'}
+                hardware_info['gpu'] = {'note': 'GPUtil not available'}
         except Exception as e:
             hardware_info['gpu'] = {'error': str(e)}
             
@@ -129,8 +178,11 @@ class DeviceIDGenerator:
             
         # Boot Time
         try:
-            boot_time = psutil.boot_time()
-            system_info['boot_time'] = boot_time
+            if PSUTIL_AVAILABLE and psutil:
+                boot_time = psutil.boot_time()
+                system_info['boot_time'] = boot_time
+            else:
+                system_info['boot_time'] = {'error': 'psutil not available'}
         except Exception as e:
             system_info['boot_time'] = {'error': str(e)}
             
@@ -141,16 +193,19 @@ class DeviceIDGenerator:
         process_info = {}
         
         try:
-            current_process = psutil.Process()
-            process_info = {
-                'pid': current_process.pid,
-                'ppid': current_process.ppid(),
-                'name': current_process.name(),
-                'create_time': current_process.create_time(),
-                'num_threads': current_process.num_threads(),
-                'memory_info': current_process.memory_info()._asdict(),
-                'cpu_percent': current_process.cpu_percent()
-            }
+            if PSUTIL_AVAILABLE and psutil:
+                current_process = psutil.Process()
+                process_info = {
+                    'pid': current_process.pid,
+                    'ppid': current_process.ppid(),
+                    'name': current_process.name(),
+                    'create_time': current_process.create_time(),
+                    'num_threads': current_process.num_threads(),
+                    'memory_info': current_process.memory_info()._asdict(),
+                    'cpu_percent': current_process.cpu_percent()
+                }
+            else:
+                process_info = {'error': 'psutil not available'}
         except Exception as e:
             process_info = {'error': str(e)}
             
@@ -170,7 +225,10 @@ class DeviceIDGenerator:
         
         # Random bytes from OS
         try:
-            entropy_info['os_random'] = os.urandom(64).hex()
+            if PSUTIL_AVAILABLE and psutil:
+                entropy_info['os_random'] = psutil.urandom(64).hex()
+            else:
+                entropy_info['os_random'] = {'error': 'psutil not available'}
         except Exception as e:
             entropy_info['os_random'] = {'error': str(e)}
             

@@ -79,6 +79,11 @@ python setup.py develop
 python final_system_test.py
 ```
 
+### Clean Build Artifacts
+```bash
+python clean_build.py
+```
+
 ##  Usage
 
 ### Method 1: Main CLI (Recommended)
