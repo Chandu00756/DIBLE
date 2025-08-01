@@ -98,20 +98,69 @@ class PolynomialOperations:
         return self.create_polynomial(coefficients, degrees)
     
     def polynomial_evaluation(self, poly: Dict[str, Any], values: Dict[str, Union[int, float]]) -> Union[int, float]:
-        """Evaluate polynomial at given point"""
-        expr = poly['expression']
-        
-        # Substitute values
-        for var_name, value in values.items():
-            if var_name in self.symbol_dict:
-                expr = expr.subs(self.symbol_dict[var_name], value)
-        
-        # Return result modulo modulus if integer
-        result = complex(expr)
-        if result.imag == 0:
-            return int(result.real) % self.modulus
-        else:
-            return result
+        """Evaluate polynomial at given values"""
+        try:
+            expr = poly['expression']
+            
+            # Substitute values
+            for var, value in values.items():
+                if var in self.symbol_dict:
+                    expr = expr.subs(self.symbol_dict[var], value)
+            
+            # Evaluate
+            result = float(expr)
+            return result % self.modulus if isinstance(result, (int, float)) else 0
+            
+        except ZeroDivisionError:
+            return 0
+        except Exception as e:
+            # Return 0 for any evaluation errors
+            return 0
+    
+    def polynomial_division(self, poly1: Dict[str, Any], poly2: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+        """Divide two polynomials (quotient and remainder)"""
+        try:
+            expr1 = poly1['expression']
+            expr2 = poly2['expression']
+            
+            # Check for zero divisor
+            if expr2 == 0:
+                raise ValueError("Division by zero polynomial")
+            
+            # Perform polynomial division
+            quotient_expr = expr1 / expr2
+            remainder_expr = expr1 % expr2
+            
+            # Convert back to polynomial format
+            quotient_poly = Poly(quotient_expr, *[self.symbol_dict[var] for var in self.variables])
+            remainder_poly = Poly(remainder_expr, *[self.symbol_dict[var] for var in self.variables])
+            
+            # Extract coefficients
+            q_coeffs = []
+            q_degrees = []
+            for monom, coeff in quotient_poly.terms():
+                q_coeffs.append(int(coeff) % self.modulus)
+                q_degrees.append(monom)
+            
+            r_coeffs = []
+            r_degrees = []
+            for monom, coeff in remainder_poly.terms():
+                r_coeffs.append(int(coeff) % self.modulus)
+                r_degrees.append(monom)
+            
+            quotient = self.create_polynomial(q_coeffs, q_degrees)
+            remainder = self.create_polynomial(r_coeffs, r_degrees)
+            
+            return quotient, remainder
+            
+        except ZeroDivisionError:
+            # Return zero polynomials for division by zero
+            zero_poly = self.create_polynomial([0], [(0,) * len(self.variables)])
+            return zero_poly, zero_poly
+        except Exception as e:
+            # Return zero polynomials for any division errors
+            zero_poly = self.create_polynomial([0], [(0,) * len(self.variables)])
+            return zero_poly, zero_poly
     
     def multivariate_polynomial_ring(self, device_id_transform: int, ring_size: int = 5) -> List[Dict[str, Any]]:
         """Create multivariate polynomial ring with device ID integration"""

@@ -478,143 +478,139 @@ class PortalVIICustomTerminal:
         self.print_colored(help_text, 'primary')
         
     def cmd_status(self, args):
-        """Display professional system status"""
+        """Display system status"""
         try:
             status = self.vault_manager.get_vault_status()
-            
-            status_text = f"""
-╔══════════════════════════════════════════════════════════════════════╗
-║                        PROFESSIONAL SYSTEM STATUS                    ║
-╚══════════════════════════════════════════════════════════════════════╝
-
-"""
-            self.print_colored(status_text, 'primary')
-            
-            for key, value in status.items():
-                key_formatted = key.replace('_', ' ').title()
-                self.print_colored(f"  {key_formatted:<25} ", 'secondary')
-                self.print_colored(f"{value}\n", 'success')
-                
-            self.print_colored("\n", 'default')
-            
+            self.print_colored("🔍 PORTAL VII System Status\n", 'primary')
+            self.print_colored(f"Algorithm: {status.get('algorithm', 'N/A')}\n", 'text')
+            self.print_colored(f"Security Level: {status.get('security_level', 'N/A')}-bit\n", 'text')
+            self.print_colored(f"Version: {status.get('version', 'N/A')}\n", 'text')
+            self.print_colored(f"Professional Mode: {status.get('professional_mode', 'N/A')}\n", 'text')
+            self.print_colored(f"Quantum Resistant: {status.get('quantum_resistant', 'N/A')}\n", 'text')
+            self.print_colored(f"Created: {status.get('created', 'N/A')}\n", 'text')
+        except ImportError as e:
+            self.print_colored(f"❌ Status error: Missing dependencies - {e}\n", 'error')
+        except AttributeError as e:
+            self.print_colored(f"❌ Status error: Vault manager issue - {e}\n", 'error')
         except Exception as e:
-            self.print_colored(f"Status error: {e}\n", 'error')
-            
+            self.print_colored(f"❌ Status error: {e}\n", 'error')
+
     def cmd_keygen(self, args):
-        """Generate new cryptographic keys"""
-        self.print_colored("🔧 Generating professional cryptographic keys...\n", 'primary')
-        
+        """Generate cryptographic keys"""
         try:
+            self.print_colored("🔑 Generating cryptographic keys...\n", 'primary')
             keys = self.crypto_core.generate_keypair()
             self.current_keys = keys
-            
-            self.print_colored("✅ Keys generated successfully!\n", 'success')
-            self.print_colored(f"   Key ID: {keys['key_id']}\n", 'secondary')
-            self.print_colored(f"   Algorithm: {keys['public_key']['algorithm']}\n", 'secondary')
-            self.print_colored(f"   Security: {keys['public_key']['security_level']}-bit\n", 'secondary')
-            
+            self.print_colored(f"✅ Keys generated successfully!\n", 'success')
+            self.print_colored(f"Key ID: {keys.get('key_id', 'N/A')}\n", 'text')
+        except ImportError as e:
+            self.print_colored(f"❌ Key generation error: Missing dependencies - {e}\n", 'error')
         except Exception as e:
-            self.print_colored(f"Key generation error: {e}\n", 'error')
-            
+            self.print_colored(f"❌ Key generation error: {e}\n", 'error')
+
     def cmd_encrypt(self, args):
-        """Encrypt file command"""
+        """Encrypt file or data"""
         if not args:
-            self.print_colored("Usage: encrypt <filename>\n", 'warning')
+            self.print_colored("❌ Usage: encrypt <filename>\n", 'error')
             return
             
         filename = args[0]
-        if not Path(filename).exists():
-            self.print_colored(f"File not found: {filename}\n", 'error')
-            return
-            
         try:
-            self.print_colored(f"🔐 Encrypting file: {filename}\n", 'primary')
+            if not Path(filename).exists():
+                self.print_colored(f"❌ File not found: {filename}\n", 'error')
+                return
+                
+            self.print_colored(f"🔐 Encrypting {filename}...\n", 'primary')
             
             # Read file
             with open(filename, 'rb') as f:
                 data = f.read()
             
-            # Encrypt
-            if not self.current_keys:
-                self.print_colored("Generating keys...\n", 'dim')
-                self.current_keys = self.crypto_core.generate_keypair()
+            # Encrypt data
+            if self.current_keys:
+                encrypted = self.crypto_core.encrypt(data, self.current_keys['public_key'])
+                output_file = f"{filename}.dible"
                 
-            encrypted = self.crypto_core.encrypt(data, self.current_keys['public_key'])
-            
-            # Save encrypted file
-            output_file = f"{filename}.dible"
-            with open(output_file, 'w') as f:
-                json.dump(encrypted, f, indent=2)
+                # Save encrypted data
+                with open(output_file, 'w') as f:
+                    json.dump(encrypted, f, indent=2)
                 
-            self.print_colored(f"✅ File encrypted successfully!\n", 'success')
-            self.print_colored(f"   Output: {output_file}\n", 'secondary')
-            
+                self.print_colored(f"✅ Encrypted to: {output_file}\n", 'success')
+            else:
+                self.print_colored("❌ No keys available. Run 'keygen' first.\n", 'error')
+        except FileNotFoundError:
+            self.print_colored(f"❌ File not found: {filename}\n", 'error')
+        except PermissionError:
+            self.print_colored(f"❌ Permission denied: {filename}\n", 'error')
+        except ImportError as e:
+            self.print_colored(f"❌ Encryption error: Missing dependencies - {e}\n", 'error')
         except Exception as e:
-            self.print_colored(f"Encryption error: {e}\n", 'error')
-            
+            self.print_colored(f"❌ Encryption error: {e}\n", 'error')
+
     def cmd_decrypt(self, args):
-        """Decrypt file command"""
+        """Decrypt file or data"""
         if not args:
-            self.print_colored("Usage: decrypt <filename.dible>\n", 'warning')
+            self.print_colored("❌ Usage: decrypt <filename>\n", 'error')
             return
             
         filename = args[0]
-        if not Path(filename).exists():
-            self.print_colored(f"File not found: {filename}\n", 'error')
-            return
-            
         try:
-            self.print_colored(f"🔓 Decrypting file: {filename}\n", 'primary')
+            if not Path(filename).exists():
+                self.print_colored(f"❌ File not found: {filename}\n", 'error')
+                return
+                
+            self.print_colored(f"🔓 Decrypting {filename}...\n", 'primary')
             
-            # Read encrypted file
+            # Read encrypted data
             with open(filename, 'r') as f:
                 encrypted = json.load(f)
             
-            # Decrypt
-            if not self.current_keys:
-                self.print_colored("No keys available. Generate keys first.\n", 'error')
-                return
+            # Decrypt data
+            if self.current_keys:
+                decrypted = self.crypto_core.decrypt(encrypted, self.current_keys['private_key'])
+                output_file = filename.replace('.dible', '.decrypted')
                 
-            decrypted = self.crypto_core.decrypt(encrypted, self.current_keys['private_key'])
-            
-            # Save decrypted file
-            output_file = filename.replace('.dible', '.decrypted')
-            with open(output_file, 'wb') as f:
-                f.write(decrypted)
+                # Save decrypted data
+                with open(output_file, 'wb') as f:
+                    f.write(decrypted)
                 
-            self.print_colored(f"✅ File decrypted successfully!\n", 'success')
-            self.print_colored(f"   Output: {output_file}\n", 'secondary')
-            
+                self.print_colored(f"✅ Decrypted to: {output_file}\n", 'success')
+            else:
+                self.print_colored("❌ No keys available. Run 'keygen' first.\n", 'error')
+        except FileNotFoundError:
+            self.print_colored(f"❌ File not found: {filename}\n", 'error')
+        except PermissionError:
+            self.print_colored(f"❌ Permission denied: {filename}\n", 'error')
+        except json.JSONDecodeError:
+            self.print_colored(f"❌ Invalid encrypted file format: {filename}\n", 'error')
+        except ImportError as e:
+            self.print_colored(f"❌ Decryption error: Missing dependencies - {e}\n", 'error')
         except Exception as e:
-            self.print_colored(f"Decryption error: {e}\n", 'error')
-            
+            self.print_colored(f"❌ Decryption error: {e}\n", 'error')
+
     def cmd_test(self, args):
-        """Run professional test suite"""
-        self.print_colored("🧪 Running professional test suite...\n", 'primary')
-        
+        """Run system tests"""
         try:
-            # Basic functionality test
-            test_data = "PORTAL VII Professional Test"
+            self.print_colored("🧪 Running PORTAL VII system tests...\n", 'primary')
             
-            # Generate keys if needed
-            if not self.current_keys:
-                self.current_keys = self.crypto_core.generate_keypair()
-                
+            # Test key generation
+            self.print_colored("Testing key generation...\n", 'text')
+            test_keys = self.crypto_core.generate_keypair()
+            
             # Test encryption/decryption
-            encrypted = self.crypto_core.encrypt(test_data, self.current_keys['public_key'])
-            decrypted = self.crypto_core.decrypt(encrypted, self.current_keys['private_key'])
+            self.print_colored("Testing encryption/decryption...\n", 'text')
+            test_data = b"PORTAL VII test data"
+            encrypted = self.crypto_core.encrypt(test_data, test_keys['public_key'])
+            decrypted = self.crypto_core.decrypt(encrypted, test_keys['private_key'])
             
-            if decrypted.decode('utf-8') == test_data:
-                self.print_colored("✅ Encryption/Decryption: PASSED\n", 'success')
-                self.print_colored("✅ Key Generation: PASSED\n", 'success')
-                self.print_colored("✅ Device Binding: PASSED\n", 'success')
-                self.print_colored("✅ Chaos Enhancement: PASSED\n", 'success')
+            if decrypted == test_data:
                 self.print_colored("✅ All tests passed!\n", 'success')
             else:
-                self.print_colored("❌ Tests failed!\n", 'error')
-                
+                self.print_colored("❌ Test failed: Data mismatch\n", 'error')
+        except ImportError as e:
+            self.print_colored(f"❌ Test error: Missing dependencies - {e}\n", 'error')
         except Exception as e:
-            self.print_colored(f"Test error: {e}\n", 'error')
+            self.print_colored(f"❌ Test error: {e}\n", 'error')
             
     def cmd_clear(self, args):
         """Clear terminal screen"""
@@ -742,8 +738,27 @@ CREATED: {status.get('created', 'N/A')[:19]}
             self.system_info.insert(1.0, info_text)
             self.system_info.config(state='disabled')
             
+        except ImportError as e:
+            # Handle missing dependencies gracefully
+            error_text = f"SYSTEM INFO: Missing dependencies\n{str(e)}"
+            self.system_info.config(state='normal')
+            self.system_info.delete(1.0, 'end')
+            self.system_info.insert(1.0, error_text)
+            self.system_info.config(state='disabled')
+        except AttributeError as e:
+            # Handle missing vault manager methods
+            error_text = f"SYSTEM INFO: Vault manager error\n{str(e)}"
+            self.system_info.config(state='normal')
+            self.system_info.delete(1.0, 'end')
+            self.system_info.insert(1.0, error_text)
+            self.system_info.config(state='disabled')
         except Exception as e:
-            pass  # Silently handle errors in background update
+            # Handle other errors
+            error_text = f"SYSTEM INFO: Update failed\n{str(e)}"
+            self.system_info.config(state='normal')
+            self.system_info.delete(1.0, 'end')
+            self.system_info.insert(1.0, error_text)
+            self.system_info.config(state='disabled')
             
     def run(self):
         """Start the professional custom terminal"""

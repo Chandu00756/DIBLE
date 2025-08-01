@@ -317,30 +317,70 @@ class QuantumOperations:
         }
     
     def quantum_random_walk(self, steps: int, dimensions: int = 1) -> List[int]:
-        """Simulate quantum random walk"""
-        if dimensions != 1:
-            raise NotImplementedError("Only 1D quantum random walk implemented")
-        
-        # Initialize coin and position
-        position = 0
-        positions = [position]
-        
-        # Quantum coin (Hadamard)
-        sqrt_half = 1 / math.sqrt(2)
-        
-        for _ in range(steps):
-            # Flip quantum coin
-            coin_result = random.choice([0, 1])  # Simplified measurement
+        """Simulate quantum random walk in multiple dimensions"""
+        if dimensions == 1:
+            # 1D quantum random walk
+            position = 0
+            positions = [position]
             
-            # Move based on coin result
-            if coin_result == 0:
-                position -= 1
-            else:
-                position += 1
+            # Quantum coin (Hadamard)
+            sqrt_half = 1 / math.sqrt(2)
             
-            positions.append(position)
-        
-        return positions
+            for _ in range(steps):
+                # Flip quantum coin
+                coin_result = random.choice([0, 1])  # Simplified measurement
+                
+                # Move based on coin result
+                if coin_result == 0:
+                    position -= 1
+                else:
+                    position += 1
+                
+                positions.append(position)
+            
+            return positions
+        elif dimensions == 2:
+            # 2D quantum random walk
+            position = [0, 0]
+            positions = [position.copy()]
+            
+            for _ in range(steps):
+                # Choose direction (up, down, left, right)
+                direction = random.choice([(0, 1), (0, -1), (1, 0), (-1, 0)])
+                position[0] += direction[0]
+                position[1] += direction[1]
+                positions.append(position.copy())
+            
+            return positions
+        elif dimensions == 3:
+            # 3D quantum random walk
+            position = [0, 0, 0]
+            positions = [position.copy()]
+            
+            for _ in range(steps):
+                # Choose direction in 3D space
+                direction = random.choice([
+                    (1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)
+                ])
+                position[0] += direction[0]
+                position[1] += direction[1]
+                position[2] += direction[2]
+                positions.append(position.copy())
+            
+            return positions
+        else:
+            # Higher dimensional quantum random walk
+            position = [0] * dimensions
+            positions = [position.copy()]
+            
+            for _ in range(steps):
+                # Choose random dimension and direction
+                dim = random.randint(0, dimensions - 1)
+                direction = random.choice([-1, 1])
+                position[dim] += direction
+                positions.append(position.copy())
+            
+            return positions
     
     def quantum_fourier_transform(self, state: np.ndarray) -> np.ndarray:
         """Apply Quantum Fourier Transform"""

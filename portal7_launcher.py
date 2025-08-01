@@ -51,6 +51,12 @@ def launch_custom_terminal():
         
         return result.returncode == 0
         
+    except FileNotFoundError:
+        print("❌ Python executable not found")
+        return False
+    except PermissionError:
+        print("❌ Permission denied when launching terminal")
+        return False
     except Exception as e:
         print(f"❌ Launch failed: {e}")
         return False
