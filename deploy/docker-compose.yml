@@ -1,7 +1,12 @@
 services:
-  dible-lab:
+  dible-control-plane:
     build: ..
-    command: python -m diblelab.cli verify --rounds 200
-    read_only: true
-    security_opt:
-      - no-new-privileges:true
+    ports: ["8080:8080"]
+    environment:
+      DIBLE_DB_PATH: /var/lib/dible/dible.db
+    volumes:
+      - dible_data:/var/lib/dible
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+volumes:
+  dible_data:
