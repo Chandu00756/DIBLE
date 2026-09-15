@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "dible"
+version = "2.0.0"
+description = "Experimental device-bound cryptography research toolkit"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.26",
+    "cryptography>=42",
+    "pycryptodome>=3.20",
+    "click>=8.1",
+    "rich>=13.7",
+    "colorama>=0.4.6",
+    "psutil>=5.9",
+]
+
+[project.scripts]
+"dible-vault" = "dible_vault_cli:vault"
+
+[tool.setuptools.packages.find]
+where = ["."]
