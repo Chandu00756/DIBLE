@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="dible",
     version="1.0.0",
-    description="Device Identity-Based Lattice Encryption Algorithm",
+    description="Experimental device-bound cryptography research toolkit",
     author="Venkata Sai Chandu Chitikam",
     author_email="",
     packages=find_packages(),
@@ -22,7 +22,7 @@ setup(
     ],
     python_requires=">=3.8",
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3.8",
