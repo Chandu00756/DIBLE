@@ -1,0 +1,7 @@
+services:
+  dible-lab:
+    build: ..
+    command: python -m diblelab.cli verify --rounds 200
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
