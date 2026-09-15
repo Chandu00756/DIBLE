@@ -234,8 +234,7 @@ class ProfessionalLatticeOperations:
         
     def generate_secure_lattice_basis(self) -> np.ndarray:
         """Generate cryptographically secure lattice basis"""
-        rng = np.random.RandomState()
-        rng.seed(int(time.time() * 1000000) % (2**32))
+        rng = np.random.default_rng(int.from_bytes(__import__("secrets").token_bytes(8), "big"))
         
         basis = rng.randint(0, self.modulus, size=(self.dimension, self.dimension))
         
@@ -247,8 +246,7 @@ class ProfessionalLatticeOperations:
     
     def generate_lwe_instance(self, secret_key: np.ndarray) -> Dict[str, np.ndarray]:
         """Generate Learning With Errors instance"""
-        rng = np.random.RandomState()
-        rng.seed(int(time.time() * 1000000) % (2**32))
+        rng = np.random.default_rng(int.from_bytes(__import__("secrets").token_bytes(8), "big"))
         
         A = rng.randint(0, self.modulus, size=(self.dimension, self.dimension))
         error = self._sample_discrete_gaussian(self.dimension)
@@ -258,8 +256,7 @@ class ProfessionalLatticeOperations:
     
     def _sample_discrete_gaussian(self, size: int) -> np.ndarray:
         """Sample from discrete Gaussian distribution"""
-        rng = np.random.RandomState()
-        rng.seed(int(time.time() * 1000000) % (2**32))
+        rng = np.random.default_rng(int.from_bytes(__import__("secrets").token_bytes(8), "big"))
         
         samples = rng.normal(0, self.sigma, size)
         return np.round(samples).astype(np.int64) % self.modulus
@@ -409,7 +406,7 @@ class DIBLECryptographicCore:
             secret_key = np.array(private_key['secret_key'], dtype=np.int64)
             encrypted_key = np.array(ciphertext_data['encrypted_key'], dtype=np.int64)
             
-            # Decrypt the AES key (simplified for demo)
+            # NOTE: AES key recovery from lattice ciphertext is a stub; replace with a vetted KEM before production use
             decrypted_key_poly = encrypted_key  # Simplified - in real implementation would use secret_key
             
             # Convert back to bytes (take first 32 bytes for AES-256)

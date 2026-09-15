@@ -20,7 +20,7 @@ def test_working_components():
         
         # Test entropy calculation
         from src.core.entropy import EntropyManager
-        entropy_mgr = EntropyManager(device_id_transform=hash(device_id) % (2**32))
+        entropy_mgr = EntropyManager(device_id_transform=int.from_bytes(__import__("hashlib").sha256(device_id.encode()).digest()[:4], "big"))
         entropy_data = {"test_data": [1, 2, 3, 4, 5, 6, 7, 8]}
         entropy_result = entropy_mgr.multidimensional_entropy(entropy_data)
         print(f"✅ Entropy: Shannon={entropy_result['test_data_shannon']:.4f}")
@@ -33,14 +33,14 @@ def test_working_components():
         
         # Test chaos generation
         from src.core.chaos import ChaosTheoryManager
-        chaos = ChaosTheoryManager(device_id_transform=hash(device_id) % (2**32))
+        chaos = ChaosTheoryManager(device_id_transform=int.from_bytes(__import__("hashlib").sha256(device_id.encode()).digest()[:4], "big"))
         chaos_seq = chaos.generate_chaotic_sequence(length=10, system='logistic')
         print(f"✅ Chaos: {len(chaos_seq)} chaotic values generated")
         
         # Test polynomial operations
         from src.core.polynomial import PolynomialOperations
         poly = PolynomialOperations(modulus=97)  # Add required modulus parameter
-        polynomial = poly.random_polynomial(max_degree=3, num_terms=4, device_id_transform=hash(device_id) % (2**32))
+        polynomial = poly.random_polynomial(max_degree=3, num_terms=4, device_id_transform=int.from_bytes(__import__("hashlib").sha256(device_id.encode()).digest()[:4], "big"))
         print(f"✅ Polynomial: Random polynomial with {len(polynomial.get('coefficients', []))} terms")
         
         print("✅ All core components working!")
@@ -128,11 +128,11 @@ def main():
         print("\n🚀 PORTAL VII DIBLE is ready for use!")
         return 0
     else:
-        print("⚠️  Some components have issues, but core system is functional")
+        print("❌ System verification failed")
         if core_ok:
             print("✅ Core cryptographic algorithms working")
         if integrator_ok:
-            print("✅ Main integration system working")  
+              
         if vault_ok:
             print("✅ Vault management system working")
         return 1

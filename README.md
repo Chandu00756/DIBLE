@@ -4,11 +4,11 @@
 [![Algorithm](https://img.shields.io/badge/Algorithm-HC--DIBLE--VAULT-green.svg)](https://github.com/Chandu00756/DIBLE)
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Production--Ready-brightgreen.svg)](https://github.com/Chandu00756/DIBLE)
+[![Status](https://img.shields.io/badge/Status-Experimental-orange.svg)](https://github.com/Chandu00756/DIBLE)
 
 ##  Overview
 
-**PORTAL VII DIBLE** (Hierarchical Chaos Device Identity-Based Lattice Encryption) is a state-of-the-art quantum-resistant cryptographic system that combines lattice-based cryptography with chaos theory, quantum-inspired operations, and advanced mathematical primitives to provide enterprise-grade encryption with device identity binding.
+**PORTAL VII DIBLE** (Hierarchical Chaos Device Identity-Based Lattice Encryption) is a experimental cryptographic-vault prototype that combines lattice-based cryptography with chaos theory, quantum-inspired operations, and advanced mathematical primitives to explore device-bound encryption workflows; it has not received an independent security audit.
 
 ###  Architecture
 
@@ -25,9 +25,9 @@ PORTAL VII DIBLE
 ##  Key Features
 
 ### 🔒 **Advanced Cryptography**
-- **Quantum-Resistant**: Post-quantum cryptographic algorithms
-- **256-bit Security**: Military-grade encryption strength
-- **Lattice-Based**: Resistant to quantum computer attacks
+- **Experimental post-quantum research**: Do not use custom cryptography to protect production secrets
+- **Security status**: The implementation is experimental and not security-audited
+- **Lattice-inspired components**: Research code, not a standardized post-quantum scheme
 - **Device Binding**: Hardware-level identity verification
 
 ###  **Core Capabilities**
@@ -42,6 +42,15 @@ PORTAL VII DIBLE
 - **Interactive Launcher**: Multiple execution options
 - **VS Code Extension**: IDE integration (optional)
 - **REST API**: Programmatic access (coming soon)
+
+## Security Notice
+
+This repository is experimental research software. It is **not production-ready**, has not been independently audited, and must not be relied on to protect sensitive or irreplaceable data. The custom lattice, chaos, quantum-inspired, and homomorphic components do not constitute a standardized post-quantum cryptosystem.
+
+
+## ⚠️ Security Notice
+
+This repository is **experimental research software**. It has not been independently audited and must not be used to protect sensitive or irreplaceable data. The custom lattice, chaos, quantum-inspired, and homomorphic components do not constitute a standardised post-quantum cryptosystem.
 
 ##  Quick Start
 
