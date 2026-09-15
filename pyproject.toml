@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dible-lab"
+version = "0.2.0"
+description = "Research-only device-bound lattice KEM experimentation toolkit"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+classifiers = ["Development Status :: 2 - Pre-Alpha", "Topic :: Security :: Cryptography"]
+
+[project.scripts]
+dible-lab = "diblelab.cli:main"
+
+[tool.setuptools]
+packages = ["diblelab", "research"]
