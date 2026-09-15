@@ -1,17 +1,9 @@
-"""
-Utils module for DIBLE algorithm
-Mathematical utilities and helper functions
-"""
-
-from .hash_functions import HashUtilities, create_hash_utility
-from .math_utils import MathematicalUtilities, create_math_utility
-from .tensor_ops import TensorOperations, create_tensor_operations
+from .hash_functions import sha3_256, sha3_512, blake2b_256, constant_time_compare
+from .math_utils import mod_inverse, gcd, is_prime, poly_add
+from .tensor_ops import matmul_mod, inner_mod
 
 __all__ = [
-    'HashUtilities',
-    'create_hash_utility',
-    'MathematicalUtilities',
-    'create_math_utility',
-    'TensorOperations',
-    'create_tensor_operations'
+    'sha3_256', 'sha3_512', 'blake2b_256', 'constant_time_compare',
+    'mod_inverse', 'gcd', 'is_prime', 'poly_add',
+    'matmul_mod', 'inner_mod',
 ]

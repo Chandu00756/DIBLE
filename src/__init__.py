@@ -1,4 +1,4 @@
-"""PORTAL VII DIBLE – experimental research components.
+"""PORTAL VII DIBLE – experimental cryptography research toolkit.
 
-Do not use in production environments.
+Not audited. Not for production use.
 """
